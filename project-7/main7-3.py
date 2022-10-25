@@ -18,7 +18,7 @@ def get_exchange_rate(target1,target2):
     
     #마지막 환율 정보 가져오기
     containers=content.find('태그',{'속성':'값'})
-    print(containers)
+    print(containers.text)
 
 
 get_exchange_rate('usd','krw')
