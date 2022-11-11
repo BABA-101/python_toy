@@ -3,7 +3,7 @@ import sqlite3
 import pyupbit
 
 # 한화로 비트코인 데이터 불러오기, 분봉으로, to 이전의 데이터, 200개
-ticker='KRW_BTC'
+ticker='KRW-BTC'
 interval='minute1'
 to='2021-12-02 11:20'
 count=200
