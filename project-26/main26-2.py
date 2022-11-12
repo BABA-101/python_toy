@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib import font_manager, rc
 
-file_path=r'project-26\lottol.xls'
+file_path=r'project-26\lotto.xlsx'
 df_from_excel=pd.read_excel(file_path,engine='openpyxl')
 
 df_from_excel=df_from_excel.drop(index=[0,1])
@@ -17,11 +17,12 @@ df_from_excel.columns=[
 ]
 
 # 엑셀 파일 확인해보면, 당첨금액이 숫자+,+원 형태로 되어있음. ,와 원 제거
-df_from_excel['1등당첨금액']=df_from_excel['1등당첨금액'].str.replace(pat=r'[ㄱ-|가-힣],+',repl=r' ', regex=True)
-df_from_excel['2등당첨금액']=df_from_excel['2등당첨금액'].str.replace(pat=r'[ㄱ-|가-힣],+',repl=r' ', regex=True)
-df_from_excel['3등당첨금액']=df_from_excel['3등당첨금액'].str.replace(pat=r'[ㄱ-|가-힣],+',repl=r' ', regex=True)
-df_from_excel['4등당첨금액']=df_from_excel['4등당첨금액'].str.replace(pat=r'[ㄱ-|가-힣],+',repl=r' ', regex=True)
-df_from_excel['5등당첨금액']=df_from_excel['5등당첨금액'].str.replace(pat=r'[ㄱ-|가-힣],+',repl=r' ', regex=True)
+# ㄱ ~ ㅣ (모음 ㅣ)
+df_from_excel['1등당첨금액']=df_from_excel['1등당첨금액'].str.replace(pat=r'[ㄱ-ㅣ가-힣,]+',repl=r'', regex=True)
+df_from_excel['2등당첨금액']=df_from_excel['2등당첨금액'].str.replace(pat=r'[ㄱ-ㅣ가-힣,]+',repl=r'', regex=True)
+df_from_excel['3등당첨금액']=df_from_excel['3등당첨금액'].str.replace(pat=r'[ㄱ-ㅣ가-힣,]+',repl=r'', regex=True)
+df_from_excel['4등당첨금액']=df_from_excel['4등당첨금액'].str.replace(pat=r'[ㄱ-ㅣ가-힣,]+',repl=r'', regex=True)
+df_from_excel['5등당첨금액']=df_from_excel['5등당첨금액'].str.replace(pat=r'[ㄱ-ㅣ가-힣,]+',repl=r'', regex=True)
 
 # 값을 숫자형태로 다시 데이터프레임에 저장.
 df_from_excel['1등당첨금액']=pd.to_numeric(df_from_excel['1등당첨금액'])
@@ -33,7 +34,8 @@ df_from_excel['5등당첨금액']=pd.to_numeric(df_from_excel['5등당첨금액'
 print(df_from_excel[['1등당첨금액','2등당첨금액','3등당첨금액','4등당첨금액','5등당첨금액']])
 
 # 그래프 이름 표시할 때 한글을 사용하기 위한 폰트 설정
-font_path='C:\windows\Fonts\NGULIM.TTF'
+# font 디렉터리에 ttf 확장자 없다고 안쓰지 말기
+font_path=r'C:/Windows/Fonts/Arial.ttf'
 font=font_manager.FontProperties(fname=font_path).get_name()
 rc('font',family=font)
 
@@ -43,7 +45,7 @@ x=df_from_excel['회차'].iloc[:100].values
 price=df_from_excel['1등당첨금액'].iloc[:100].values / 100000000
 
 # 그래프의 초기 표시 크기 결정
-plt.figure(figsize=(10.6))
+plt.figure(figsize=(10,6))
 plt.xlabel('회차')
 plt.ylabel('당첨금액(단위:억원')
 

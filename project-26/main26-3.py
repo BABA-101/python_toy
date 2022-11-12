@@ -2,7 +2,7 @@
 import pandas as pd
 from collections import Counter
 
-file_path=r'project-26\lottol.xls'
+file_path=r'project-26\lotto.xlsx'
 df_from_excel=pd.read_excel(file_path,engine='openpyxl')
 
 df_from_excel=df_from_excel.drop(index=[0,1])
@@ -22,8 +22,8 @@ num_list+=list(df_from_excel['당첨번호3'].astype(int))
 num_list+=list(df_from_excel['당첨번호4'].astype(int))
 num_list+=list(df_from_excel['당첨번호5'].astype(int))
 
-# 가장 많이 나온 숫자 45개 찾기
+# 가장 많이 나온 숫자  n개 찾기
 count = Counter(num_list)
-most_num=count.most_common(45)
+most_num=count.most_common(1)
 
 print(most_num)
