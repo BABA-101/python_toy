@@ -1,4 +1,4 @@
-# 게임 플레이어 만들기
+# 빨간 네모 피해서 점프하기 게임
 import pygame
 import sys
 
@@ -18,10 +18,8 @@ class Player():
         self.jumpCount = 10
         
     def draw(self):
-        #직사각형 그리기, 파란색 네모, x,y 좌표에 40x40 크기로 그림. 반환값은 좌표 크기
         return pygame.draw.rect(screen,(0,0,255),(self.x,self.y,40,40))
     
-    # 플레이어 점프 구현
     def jump(self):
         if self.isJump:
             if self.jumpCount >= -10:
@@ -33,15 +31,29 @@ class Player():
             else:
                 self.isJump = False
                 self.jumpCount = 10
-            
-# player 라는 이름으로 객체 생성, x=50, y=바닥. 바닥면으로 붙이기 위해, 높이에서 자신의 y좌표만큼 빼준다.
+
+class Enemy():
+    def __init__(self,x,y):
+        self.x=x
+        self.y=y
+        
+    def draw(self):
+        return pygame.draw.rect(screen,(255,0,0),(self.x,self.y,20,40))
+    
+    # 화면 오른쪽 끝에서부터(MAX_WIDTH) 왼쪽으로 이동시키는 함수
+    def move(self,speed):
+        self.x = self.x - speed
+        # 왼쪽끝 (x=0) 도착 시 다시 MAX_WIDTH위치로
+        if self.x <= 0:
+            self.x=MAX_WIDTH
+        
 player = Player(50, MAX_HEIGHT - 40)
+enemy = Enemy(MAX_WIDTH,MAX_HEIGHT - 40)
 
 def main():
+    speed=7
+    
     while True:
-        # pygame.event.get(): 사용자가 발생시킨 이벤트를 가져옴.
-        # 가져온 이벤트 중 하나를 event변수에 대입하여 타입 검사
-        # 키다운 - 스페이스바면 점프=True
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -50,17 +62,22 @@ def main():
                 if event.key == pygame.K_SPACE:
                     player.isJump = True
                     
-        clock.tick(FPS) # 프레임 설정
+        clock.tick(FPS) 
         screen.fill((255, 255, 255))
-        
-        # 해당 좌표에 플레이어(네모) 그리기. - 반환값은 좌표와 크기
+
         player_rect = player.draw()
-        # 점프 구현. player.isJump 변수가 True일 때 동작함
-        # isJump가 True면 새로운 좌표를 얻어온다
         player.jump()
         
-        print(player_rect)
+        enemy_rect=enemy.draw()
+        enemy.move(speed)
+        speed=speed+0.01
         
+        # colliderect(): rect()로 생성된 객체에서 사용할 수 있는 함수. 해당 사각형과 인자로 들어온 사각형이 overlap 시 True반환
+        if player_rect.colliderect(enemy_rect):
+            print("DIE............")
+            pygame.quit()
+            sys.exit()
+
         pygame.display.update()
         
 if __name__ == '__main__':
